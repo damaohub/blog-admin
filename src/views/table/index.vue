@@ -11,25 +11,27 @@
           {{scope.row.title}}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column label="content" >
         <template slot-scope="scope">
-          <span>{{scope.row.author}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{scope.row.pageviews}}
+          {{scope.row.content}}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="Status" width="110" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
+          <el-tag :type="scope.row.status | statusFilter">{{status2string(scope.row.status)}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="Display_time" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span>{{scope.row.display_time}}</span>
+          <span>{{updateTime(scope.row.updatedAt)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Actions"  >
+        <template slot-scope="scope">
+            <el-button type="primary" size="mini">编辑</el-button>
+            <el-button v-if="scope.row.status!=1" type="success" size="mini"  @click="switchStatus(scope.row,scope.row.status)">发布</el-button>
+            <el-button v-if="scope.row.status!=2" size="mini" @click="switchStatus(scope.row,scope.row.status)">草稿</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -37,8 +39,8 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
-
+import { getList, updStat } from '@/api/table'
+import { formatTime } from '@/utils/index'
 export default {
   data() {
     return {
@@ -49,8 +51,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
+        1: 'success',
+        2: 'gray',
         deleted: 'danger'
       }
       return statusMap[status]
@@ -63,9 +65,33 @@ export default {
     fetchData() {
       this.listLoading = true
       getList(this.listQuery).then(response => {
-        this.list = response.data.items
+        this.list = response.data
         this.listLoading = false
       })
+    },
+    updateTime(timer) {
+      return formatTime(timer / 1000)
+    },
+    switchStatus(row, currentStatus) {
+      var tarStatus
+      if (currentStatus === 1) {
+        tarStatus = 2
+      } else if (currentStatus === 2) {
+        tarStatus = 1
+      }
+      updStat(row.id, tarStatus).then(response => {
+        this.$message({
+          message: '操作成功',
+          tyoe: 'success'
+        })
+        row.status = tarStatus
+      })
+    },
+    status2string(statusCode) {
+      return statusCode === 1 ? '已发布' : '草稿'
+    },
+    toEdit(){
+      
     }
   }
 }

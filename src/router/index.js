@@ -38,41 +38,40 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
+    path: '/list',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        name: 'List',
+        component: () => import('@/views/table/index'),
+        meta: { title: '文章列表', icon: 'table' }
       }
     ]
-  },
+  }
 
-  { path: '*', redirect: '/404', hidden: true }
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: 'Example',
+  //   meta: { title: 'Example', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'table',
+  //       name: 'Table',
+  //       component: () => import('@/views/table/index'),
+  //       meta: { title: 'Table', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'tree',
+  //       name: 'Tree',
+  //       component: () => import('@/views/tree/index'),
+  //       meta: { title: 'Tree', icon: 'tree' }
+  //     }
+  //   ]
+  // }
+
 ]
 
 export default new Router({
@@ -80,4 +79,22 @@ export default new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
+
+export const asyncRouterMap = [
+  {
+    path: '/form',
+    component: Layout,
+    meta: { roles: ['admin'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/form/index'),
+        meta: { title: '写文章', icon: 'form', roles: ['admin'] }
+      }
+    ]
+  },
+
+  { path: '*', redirect: '/404', hidden: true }
+]
 
