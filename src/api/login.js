@@ -1,14 +1,25 @@
 import request from '@/utils/request'
 
+export function regist(formData) {
+  return request({
+    url: 'regist',
+    method: 'post',
+    data: {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password
+    }
+  })
+}
+
 export function loginByUsername(username, password) {
-  const data = {
-    username,
-    password
-  }
   return request({
     url: 'login',
     method: 'post',
-    data
+    data: {
+      username,
+      password
+    }
   })
 }
 

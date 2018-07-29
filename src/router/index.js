@@ -23,6 +23,7 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/regist', component: () => import('@/views/login/regist') },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
@@ -35,43 +36,7 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
-  },
-
-  {
-    path: '/list',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'List',
-        component: () => import('@/views/table/index'),
-        meta: { title: '文章列表', icon: 'table' }
-      }
-    ]
   }
-
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/table',
-  //   name: 'Example',
-  //   meta: { title: 'Example', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: 'Table', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'tree',
-  //       name: 'Tree',
-  //       component: () => import('@/views/tree/index'),
-  //       meta: { title: 'Tree', icon: 'tree' }
-  //     }
-  //   ]
-  // }
-
 ]
 
 export default new Router({
@@ -82,19 +47,56 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/form',
+    path: '/list',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'List',
+        component: () => import('@/views/list/index'),
+        meta: { title: '文章列表', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/post',
     component: Layout,
     meta: { roles: ['admin'] },
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
+        name: 'Post',
+        component: () => import('@/views/post/index'),
         meta: { title: '写文章', icon: 'form', roles: ['admin'] }
       }
     ]
   },
-
+  {
+    path: '/post',
+    component: Layout,
+    meta: { roles: ['admin'] },
+    hidden: true,
+    children: [
+      {
+        path: 'edit/:postId',
+        name: 'Edit',
+        component: () => import('@/views/post/edit'),
+        meta: { title: '编辑文章', roles: ['admin'] }
+      }
+    ]
+  },
+  {
+    path: '/tag',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Tag',
+        component: () => import('@/views/tags/index'),
+        meta: { title: '标签管理', icon: 'table', roles: ['admin'] }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

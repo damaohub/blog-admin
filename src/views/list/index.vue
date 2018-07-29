@@ -11,11 +11,6 @@
           {{scope.row.title}}
         </template>
       </el-table-column>
-      <el-table-column label="content" >
-        <template slot-scope="scope">
-          {{scope.row.content}}
-        </template>
-      </el-table-column>
       <el-table-column class-name="status-col" label="Status" width="110" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{status2string(scope.row.status)}}</el-tag>
@@ -29,9 +24,10 @@
       </el-table-column>
       <el-table-column align="center" label="Actions"  >
         <template slot-scope="scope">
-            <el-button type="primary" size="mini">编辑</el-button>
+            <el-button type="primary" size="mini" @click="handeleEditPost(scope.row)">编辑</el-button>
             <el-button v-if="scope.row.status!=1" type="success" size="mini"  @click="switchStatus(scope.row,scope.row.status)">发布</el-button>
             <el-button v-if="scope.row.status!=2" size="mini" @click="switchStatus(scope.row,scope.row.status)">草稿</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="handleDeletePost(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,7 +35,7 @@
 </template>
 
 <script>
-import { getList, updStat } from '@/api/table'
+import { getList, updStat, deletePost } from '@/api/article'
 import { formatTime } from '@/utils/index'
 export default {
   data() {
@@ -80,18 +76,36 @@ export default {
         tarStatus = 1
       }
       updStat(row.id, tarStatus).then(response => {
+        row.status = tarStatus
         this.$message({
           message: '操作成功',
-          tyoe: 'success'
+          type: 'success'
         })
-        row.status = tarStatus
       })
     },
     status2string(statusCode) {
       return statusCode === 1 ? '已发布' : '草稿'
     },
-    toEdit(){
-      
+    handeleEditPost(row) {
+      this.$router.push({ name: 'Edit', params: { postId: row.id }})
+    },
+    handleDeletePost(row) {
+      this.listLoading = true
+      deletePost(row.id).then(response => {
+        var list = this.list
+        var deleteIndex
+        for (var key in list) {
+          if (list[key].id === row.id) {
+            deleteIndex = key
+          }
+        }
+        this.list.splice(deleteIndex, 1)
+        this.listLoading = false
+        this.$message({
+          message: '已删除！',
+          type: 'success'
+        })
+      })
     }
   }
 }

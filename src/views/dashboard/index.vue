@@ -2,6 +2,7 @@
   <div class="dashboard-container">
     <div class="dashboard-text">name:{{name}}</div>
     <div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div>
+    <div>亲爱的{{name}}，作为<span v-for='role in roles' :key='role'>{{role}}</span>你暂时只能看到这些了，由于权限侧边导航不能显示更多。</div>
   </div>
 </template>
 
@@ -27,6 +28,9 @@ export default {
   &-text {
     font-size: 30px;
     line-height: 46px;
+    span {
+      margin: 0 5px;
+    }
   }
 }
 </style>

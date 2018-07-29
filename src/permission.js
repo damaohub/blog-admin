@@ -12,7 +12,7 @@ function hasPermission(roles, permissionRoles) {
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
 
-const whiteList = ['/login'] // 不重定向白名单
+const whiteList = ['/login', '/regist'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
@@ -22,12 +22,15 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetUserInfo').then(res => { // 拉取用户信息
-          const roles = [res.data.roles] // note: roles must be a array! such as: ['editor','develop']
-          console.log(roles)
-          store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
-            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-          })
+          if (res.data.roles.length !== 0) {
+            const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
+            store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
+              router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+              next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+            })
+          } else {
+            next()
+          }
         }).catch(() => {
           store.dispatch('FedLogOut').then(() => {
             Message.error('验证失败, 请重新登录')

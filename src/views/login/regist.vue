@@ -1,12 +1,12 @@
 <template>
-  <form-detail :isRegist='false'></form-detail>
+  <form-detail :isRegist='true'></form-detail>
 </template>
 
 <script>
 import FormDetail from './components/FormDetail'
 
 export default {
-  name: 'login',
+  name: 'regist',
   components: { FormDetail }
 }
 </script>

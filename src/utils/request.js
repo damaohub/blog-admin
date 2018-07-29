@@ -27,14 +27,15 @@ service.interceptors.response.use(
   /**
   * code为非20000是抛错 可结合自己业务进行修改
   */
-
     const res = response.data
-    console.log(res)
     if (res.code !== 20000) {
       Message({
         message: res.msg,
         type: 'error',
-        duration: 5 * 1000
+        duration: 5 * 1000,
+        onClose: () => {
+          location.reload()
+        }
       })
 
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
