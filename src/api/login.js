@@ -30,10 +30,9 @@ export function logout() {
   })
 }
 
-export function getUserInfo(token) {
+export function getUserInfo() {
   return request({
     url: 'info',
-    method: 'get',
-    params: { token }
+    method: 'post'
   })
 }

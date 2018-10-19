@@ -1,16 +1,15 @@
 import request from '@/utils/request'
 
-export function getList(params) {
+export function getList() {
   return request({
-    url: 'article/posts',
-    method: 'get',
-    params
+    url: 'post-list',
+    method: 'post'
   })
 }
 
 export function updStat(postID, status) {
   return request({
-    url: 'article/upstat',
+    url: 'post-upstat',
     method: 'post',
     data: {
       postID: postID,
@@ -21,7 +20,7 @@ export function updStat(postID, status) {
 
 export function deletePost(postID) {
   return request({
-    url: 'article/delete',
+    url: 'post-delete',
     method: 'post',
     data: {
       postID: postID
@@ -31,7 +30,7 @@ export function deletePost(postID) {
 
 export function createPost(info) {
   return request({
-    url: 'article/create',
+    url: 'post-create',
     method: 'post',
     data: info
   })
@@ -39,14 +38,14 @@ export function createPost(info) {
 
 export function updatePost(info) {
   return request({
-    url: 'article/update',
+    url: 'post-update',
     method: 'post',
     data: info
   })
 }
 export function fetchArticle(id) {
   return request({
-    url: 'article/detail',
+    url: 'post-detail',
     method: 'get',
     params: { //  axios  get传参用params
       postID: id

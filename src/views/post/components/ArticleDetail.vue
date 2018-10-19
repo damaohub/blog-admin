@@ -94,8 +94,8 @@ export default {
         title: [{ required: true, message: '请输入题目', trigger: 'blur' }],
         content: [{ required: true, message: '请输入文章内容', trigger: 'blur' }]
       },
-      defaultTags: [],
-      tags: [],
+      defaultTags: [], // 库中原有的所有标签,用于下拉多选
+      tags: [], // 选择的标签
       diffTags: []
     }
   },
@@ -159,7 +159,7 @@ export default {
           this.postForm.status = statusCode
           const message = statusCode === 1 ? '发布文章成功' : '草稿保存成功'
           let resultForm = this.assignTags(this.postForm, this.tagsObj, this.defaultTags)
-          createPost(resultForm).then(response => {
+          createPost(resultForm).then(response => { // resultForm 对象中组合进的{ diffTags: _diffTags, tags: _tags }，tags为本次文章操作后的所有标签，diffTags为与数据库中相比新增的标签，如若没有新增或者减少则为[]
             this.$notify({
               title: '成功',
               message: message,

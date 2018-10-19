@@ -7,12 +7,22 @@ export function getTags() {
   })
 }
 
-export function postCountBytag(tag) {
+export function postsBytag(tag) {
   return request({
-    url: 'tags/post-count',
+    url: 'tag-posts',
     method: 'post',
     data: {
       tagName: tag
+    }
+  })
+}
+
+export function deleteTag(_tagId) {
+  return request({
+    url: 'tag-delete',
+    method: 'post',
+    data: {
+      tagId: _tagId
     }
   })
 }

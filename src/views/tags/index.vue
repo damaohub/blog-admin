@@ -15,9 +15,14 @@
         >
       </el-table-column>
       <el-table-column
-        prop="count"
         label="挂载文章数"
         >
+        <template slot-scope="scope">
+          <div v-if="false" style="text-align:center;">
+              <div>共{{postCount}}篇文章</div>
+          </div>
+          <el-button v-else size="mini" type="primary" @click="handleShowDetail(scope.$index, scope.row )">查看</el-button>
+        </template>
       </el-table-column>
      
     <el-table-column label="操作">
@@ -39,36 +44,48 @@
 </template>
 
 <script>
-import { getTags, postCountBytag } from '@/api/tag'
+import { getTags, deleteTag, postsBytag } from '@/api/tag'
 export default {
   data() {
     return {
       list: [],
-      listLoading: false
+      listLoading: false,
+      postCount: '',
+      posts: []
     }
+  },
+  watch() {
+
   },
   created() {
     this.getData()
   },
   methods: {
     getData() {
+      this.listLoading = true
       getTags().then(response => {
-        let tags = response.data
-        let _list = []
-        for (let i = 0; i < tags.length; i++) {
-          postCountBytag(tags[i].name).then(response => {
-            _list.push({
-              id: tags[i].id,
-              name: tags[i].name,
-              count: response.data
-            })
-          })
-        }
-        this.list = _list
+        this.list = response.data
+        this.listLoading = false
       })
     },
     handleDelete(index, row) {
-      console.log(index, row)
+      deleteTag(row.id).then(
+        response => {
+          this.getData()
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+        }
+      )
+    },
+    handleShowDetail(index, row) {
+      postsBytag(row.name).then(
+        response => {
+          this.postCount = response.data.count
+          this.posts = response.data.rows
+        }
+      )
     }
   }
 }

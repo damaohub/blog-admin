@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+import md5s from '@/utils/md5s'
 import { regist } from '@/api/login'
 export default {
   name: 'formDetail',
@@ -61,13 +61,6 @@ export default {
     }
   },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
@@ -114,7 +107,7 @@ export default {
     },
     handleLogin() {
       const { username, password } = this.defaultForm
-      const loginForm = { username, password }
+      const loginForm = { username, password: md5s.md5(password) }
       this.$refs.defaultForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -136,7 +129,7 @@ export default {
     },
     handleRegist() {
       const { username, email, password, checkPass } = this.defaultForm
-      const registForm = { username, email, password, checkPass }
+      const registForm = { username, email, password: md5s.md5(password), checkPass: md5s.md5(checkPass) }
       this.$refs.defaultForm.validate(valid => {
         if (valid) {
           this.loading = true
