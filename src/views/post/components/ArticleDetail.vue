@@ -72,7 +72,7 @@ const defaultForm = {
   status: 1,
   title: '', // 文章题目
   content: '', // 文章内容
-  display_time: new Date().getTime(), // 前台展示时间
+  // display_time: new Date().getTime(), // 前台展示时间
   id: undefined
 }
 export default {

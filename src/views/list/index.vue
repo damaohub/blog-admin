@@ -22,7 +22,7 @@
           <span>{{updateTime(scope.row.updatedAt)}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作"  >
+      <el-table-column align="center" label="操作"  min-width="206">
         <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="handeleEditPost(scope.row)">编辑</el-button>
             <el-button v-if="scope.row.status!=1" type="success" size="mini"  @click="switchStatus(scope.row,scope.row.status)">发布</el-button>

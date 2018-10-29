@@ -7,13 +7,13 @@
         <span class="svg-container svg-container_form">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="defaultForm.username" autoComplete="on" placeholder="用户名" />
+        <el-input name="username" type="text" v-model="defaultForm.username" autoComplete="off" placeholder="用户名" />
       </el-form-item>
       <el-form-item prop="email" v-if=isRegist>
         <span class="svg-container svg-container_form">
           <i class="el-icon-message"></i>
         </span>
-        <el-input name="email" type="email" v-model="defaultForm.email" autoComplete="on" placeholder="邮箱" />
+        <el-input name="email" type="email" v-model="defaultForm.email" autoComplete="off" placeholder="邮箱" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
